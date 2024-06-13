@@ -17,17 +17,19 @@ function App() {
 
   return (
     <>
-    {
-      localStorage.getItem("accessToken") ?  <SideBar className/> : ""
-    }
-      <Routes>
-        <Route path='/' element={<Login_page/>}/>
-        <Route path='/categories' element={<Categories_page/>}/>
-        <Route path='/brands' element={  <Brands_page/>}/>
-        <Route path='/cities' element={ <Cities_page/>}/>
-        <Route path='/locations' element={<Locations_page/>}/>
-        <Route path='/cars' element={ <Cars_page/>}/>
-        <Route path='/models' element={<Models_page/>}/>
+    {/* {
+      localStorage.getItem("accessToken") ?  <SideBar /> : ""
+    } */}
+      <Routes path='/'  element={<Login_page/>}>
+        <Route  index element={<Login_page/>}/>
+        <Route path='home' element={<SideBar /> }>
+          <Route path='categories' element={<Categories_page/>}/>
+          <Route path='brands' element={  <Brands_page/>}/>
+          <Route path='cities' element={ <Cities_page/>}/>
+          <Route path='locations' element={<Locations_page/>}/>
+          <Route path='cars' element={ <Cars_page/>}/>
+          <Route path='models' element={<Models_page/>}/>
+        </Route>
       </Routes>
       <ToastContainer/>
   </>
