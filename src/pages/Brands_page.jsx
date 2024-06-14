@@ -2,7 +2,9 @@
 
 const Brands_page = () => {
   return (
-    <div>Brands_page</div>
+    <div>
+      <h2>Hello, My friends</h2>
+    </div>
   )
 }
 
