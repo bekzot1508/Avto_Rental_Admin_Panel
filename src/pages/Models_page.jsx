@@ -1,8 +1,12 @@
+import Models from "../components/Models/Models"
+
  
 
 const Models_page = () => {
   return (
-    <div>Models_page</div>
+    <div>
+      <Models/>
+    </div>
   )
 }
 
