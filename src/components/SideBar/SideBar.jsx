@@ -20,13 +20,13 @@ const SideBar = () => {
       <div
         className={` ${
           open ? "w-64" : "w-20 "
-        } bg-blue-950 w-full p-5 relative duration-300`}
+        } bg-blue-950  p-5 relative duration-300`}
       >
          {
           open ? <h1 className="font-[700] text-white text-xl ">AutoZoom Admin</h1> : <h1 className="text-white font-[700]">Auto</h1>
          } 
         <ul className="pt-6">
-            <li className={`flex  rounded-xl p-2 cursor-pointer text-sm items-center gap-x-2 text-white hover:bg-blue-600`}>
+            <li className={`flex  rounded-xl p-2 cursor-pointer text-sm font-[700] hover:font-[800] items-center gap-x-2 text-white hover:bg-blue-600`}>
               <p><TextIndent size={15} /></p>
               <span className={`${!open && "hidden"} origin-left duration-200`}>
                 <NavLink to={"categories"}>
@@ -35,7 +35,7 @@ const SideBar = () => {
               </span>
             </li>
 
-            <li className={`flex  rounded-md p-2 cursor-pointer text-sm items-center gap-x-2 text-white hover:bg-blue-600 `}>
+            <li className={`flex  rounded-md p-2 cursor-pointer text-sm font-[700] hover:font-[800] items-center gap-x-2 text-white hover:bg-blue-600 `}>
               <p><Timer size={15} /></p>
               <span className={`${!open && "hidden"} origin-left duration-200`}>
                 <NavLink to={"brands"}>
@@ -44,7 +44,7 @@ const SideBar = () => {
               </span>
             </li>
 
-            <li className={`flex  rounded-md p-2 cursor-pointer text-sm items-center gap-x-2 text-white  hover:bg-blue-600`}>
+            <li className={`flex  rounded-md p-2 cursor-pointer text-sm font-[700] hover:font-[800] items-center gap-x-2 text-white  hover:bg-blue-600`}>
               <p><BuildingOffice size={15} /></p>
               <span className={`${!open && "hidden"} origin-left duration-200`}>
                 <NavLink to={"cities"}>
@@ -53,7 +53,7 @@ const SideBar = () => {
               </span>
             </li>
 
-            <li className={`flex  rounded-md p-2 cursor-pointer text-sm items-center gap-x-2 text-white hover:bg-blue-600`}>
+            <li className={`flex  rounded-md p-2 cursor-pointer text-sm font-[700] hover:font-[800] items-center gap-x-2 text-white hover:bg-blue-600`}>
               <p><MapPin size={15} /></p>
               <span className={`${!open && "hidden"} origin-left duration-200`}>
                 <NavLink to={"locations"}>
@@ -62,7 +62,7 @@ const SideBar = () => {
               </span>
             </li>
 
-            <li className={`flex  rounded-md p-2 cursor-pointer text-sm items-center gap-x-2 text-white hover:bg-blue-600`}>
+            <li className={`flex  rounded-md p-2 cursor-pointer text-sm font-[700] hover:font-[800] items-center gap-x-2 text-white hover:bg-blue-600`}>
               <p><Car size={15} /></p>
               <span className={`${!open && "hidden"} origin-left duration-200`}>
                 <NavLink to={"cars"}>
@@ -71,7 +71,7 @@ const SideBar = () => {
               </span>
             </li>
 
-            <li className={`flex  rounded-md p-2 cursor-pointer text-sm items-center gap-x-2 text-white hover:bg-blue-600 `}>
+            <li className={`flex  rounded-md p-2 cursor-pointer text-sm font-[700] hover:font-[800] items-center gap-x-2 text-white hover:bg-blue-600 `}>
               <p><WindowsLogo size={15} /></p>
               <span className={`${!open && "hidden"} origin-left duration-200`}>
                 <NavLink to={"models"}>
