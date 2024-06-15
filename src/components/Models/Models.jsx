@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Modal, message } from 'antd';
-import { NavLink } from "react-router-dom";
+import { Modal, message,  Button, Table,  } from 'antd';
+
 
 const Models = () => {
     const [Models, setModels] = useState([])
@@ -15,7 +15,7 @@ const Models = () => {
     const [open, setOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
 //    console.log(brands);
-    const modelsPage_1 = Models.slice(0, 10)
+  
    console.log(Models);
 
     // const urlImage = "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
@@ -137,49 +137,53 @@ const Models = () => {
         setEditOpen(true)
       }
 
+      // post table column
+      const columns = [
+        {
+          title: '№',
+          dataIndex: 'number',
+          key: 'number',
+        },
+        {
+          title: 'Model',
+          dataIndex: 'model',
+          key: 'model',
+        },
+        {
+            title: 'Brand Name',
+            dataIndex: 'brand_name',
+            key: 'brand_name',
+        },
+        {
+          title: 'Action',
+          dataIndex: 'action',
+          key: 'action',
+        },
+      ];
+      
+        // post table DataSource
+        const dataSource = Models.map((model, index) => ({
+            key: model.id,
+            number: index + 1,
+            brand_name: model.brand_title,
+            model: model.name,
+            action: (
+              <>
+                <Button className="mr-[20px]" type="primary"  onClick={() => showEdit(model)}>Edit</Button>
+                <Button type="primary" danger onClick={() => deleteModel(model.id)}>Delete</Button>
+              </>
+            )
+          }));
+
   return (
-    <div>
+    <div className="">
         {/* GET */}
-        <div class="flex flex-col">
-            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                        <div  class="overflow-hidden rounded-t-[5px]">
-                            <table class="min-w-full text-left text-sm font-light text-surface dark:text-white ">
-                                <thead class="border-b border-neutral-200   font-medium bg-gray-100 dark:border-white/10 relative">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-4 ">Name</th>
-                                        <th scope="col" class="px-6 py-4">Brand</th>
-                                        <th scope="col" class="px-6 py-4">Actions</th> 
-                                    </tr>
-                                    <button className="rounded-md bg-blue-700 hover:bg-blue-600 text-white p-2  absolute top-2 right-4" onClick={() => setPostOpener(true)}>add model</button>
-                                </thead>
-                                {
-                                   modelsPage_1.map((model, index) => (
-                                        <tbody key={index}>
-                                            <tr class="border-b border-neutral-200 dark:border-white/10">
-                                                <td class="whitespace-nowrap px-6 py-4  font-[500]">{model.name}</td>
-                                                <td class="whitespace-nowrap px-6 py-4 font-[500]">{model.brand_title}</td>
-                                                <td class="whitespace-nowrap px-6 py-4">
-                                                    <button className="mr-2 bg-blue-600 py-1 px-3 text-white rounded-md" onClick={() => showEdit(model)}>Edit</button>
-                                                    <button className="bg-red-600 py-1 px-3 text-white rounded-md" onClick={() => handleOpen(model?.id)}>Delete</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    ))
-                                }
-                            </table>
-                        </div>     
-                       <div className="flex mt-3 gap-4 justify-end pr-20">
-                           <NavLink to={"models_2"} className={`bg-blue-500 px-4 py-1 rounded-sm text-white font-[600] hover:bg-blue-700`}>
-                                2
-                            </NavLink>
-                            <NavLink to={"models_3"} className={`bg-blue-500 px-4 py-1 rounded-sm text-white font-[600] hover:bg-blue-700`}>
-                                3
-                            </NavLink>
-                       </div>
-                </div>
-            </div>
-        </div>
+      <div className="relative  ">
+       <button className="rounded-md bg-blue-700 hover:bg-blue-600 text-white py-1 px-3  absolute top-1 right-4 z-10" onClick={() => setPostOpener(true)}>add Model</button>
+        <Table size="small"  columns={columns} dataSource={dataSource}   pagination={{
+      pageSize: 9,
+    }} />
+      </div>
         {/* Post Modal */}
         <Modal title="Add a new model" open={postOpener} onOk={() => setPostOpener(true)} onCancel={() => setPostOpener(false)} footer={null} >
             <form id="myForm" onSubmit={createModels}>

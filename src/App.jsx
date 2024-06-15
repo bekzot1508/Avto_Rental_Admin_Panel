@@ -8,8 +8,6 @@ import Categories_page from './pages/Categories_page'
 import Cities_page from './pages/Cities_page'
 import Locations_page from './pages/Locations_page'
 import Models_page from './pages/Models_page'
-import Models_page_2 from './components/Models/Models_page_2'
-import Models_page_3 from './components/Models/Models_page_3'
 import Login_page from './pages/Login_page'
 
 // Toastify link
@@ -32,8 +30,6 @@ function App() {
           <Route path='locations' element={<Locations_page/>}/>
           <Route path='cars' element={ <Cars_page/>}/>
           <Route path='models' element={<Models_page/>}/>
-          <Route path='models/models_2' element={<Models_page_2/>}/>
-          <Route path='models/models_3' element={<Models_page_3/>}/>
         </Route>
       </Routes>
       <ToastContainer/>

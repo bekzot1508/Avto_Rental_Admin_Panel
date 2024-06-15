@@ -16,16 +16,17 @@ const SideBar = () => {
    }
   return (
      
-     <div className="flex bg-gray-300 h-screen">
+     <div className="flex bg-gray-300 h-screen w-screen ">
       <div
         className={` ${
-          open ? "w-64" : "w-20 "
-        } bg-blue-950  p-5 relative duration-300`}
+          open ? "w-2/12" : "w-20 "
+        } bg-blue-950  p-5 duration-300 h-full `}
       >
-         {
+        <div className="fixed top-0 pt-6">
+        {
           open ? <h1 className="font-[700] text-white text-xl ">AutoZoom Admin</h1> : <h1 className="text-white font-[700]">Auto</h1>
          } 
-        <ul className="pt-6">
+        <ul className="pt-6 ">
             <li className={`flex  rounded-xl p-2 cursor-pointer text-sm font-[700] hover:font-[800] items-center gap-x-2 text-white hover:bg-blue-600`}>
               <p><TextIndent size={15} /></p>
               <span className={`${!open && "hidden"} origin-left duration-200`}>
@@ -80,46 +81,19 @@ const SideBar = () => {
               </span>
             </li>
         </ul>
+        </div>
       </div>
 
-        <div className="flex flex-col pb-5 w-full">
-            <div className="flex justify-between pr-64 pl-10 py-5 bg-white fixed top-0 w-full">
+        <div className="flex flex-col pb-5 w-full  overflow-y-scroll ">
+            <div className={`flex justify-between z-20 ${ open ? "pr-72" : "pr-40"} pl-10 py-5  bg-white fixed top-0 w-full`}>
                 <button type="button" onClick={() => setOpen(!open)}><ListBullets size={25} /></button>
                 <button type="button" className="border border-gray-500 px-2 py-0.5 rounded-md" onClick={logOutButton}>Log out</button>
             </div>
-            <div className="bg-white rounded-md h-full px-5 py-8 mx-5 mt-20 ">
-              <Outlet className="mb-10"/>
+            <div className="bg-white z-1 rounded-md px-3 py-3 mx-5 mt-20 mb-20  ">
+              <Outlet/>
             </div>
         </div>
     </div>
-
-        
-        /* <div className="grid grid-cols-1 gap-5 bg-blue-400 w-[300px]">
-            <NavLink to={"categories"}>
-                Categories
-            </NavLink>
-            <NavLink to={"brands"}>
-                Brands
-            </NavLink>
-            <NavLink to={"cities"}>
-                Cities
-            </NavLink>
-            <NavLink to={"locations"}>
-                Locations
-            </NavLink>
-            <NavLink to={"cars"}>
-                Cars
-            </NavLink>
-            <NavLink to={"models"}>
-            Models
-            </NavLink>
-        </div>
-         <div>
-            <div>
-                <p>navbar</p>
-            </div>
-           <Outlet/>  
-         </div> */
   )
 }
 
