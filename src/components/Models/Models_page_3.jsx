@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Modal, message } from 'antd';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate} from "react-router-dom";
 
-const Models = () => {
+const Models_page_2 = () => {
     const [Models, setModels] = useState([])
     const [brands, setBrands] = useState([])
     const [postModels, setPostModels] = useState({name:"", brand_id:null})
@@ -14,8 +14,9 @@ const Models = () => {
     const [postOpener, setPostOpener] = useState(false)
     const [open, setOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
+    const navigate = useNavigate()
 //    console.log(brands);
-    const modelsPage_1 = Models.slice(0, 10)
+    const modelsPage_1 = Models.slice(21)
    console.log(Models);
 
     // const urlImage = "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
@@ -168,15 +169,12 @@ const Models = () => {
                                     ))
                                 }
                             </table>
-                        </div>     
-                       <div className="flex mt-3 gap-4 justify-end pr-20">
-                           <NavLink to={"models_2"} className={`bg-blue-500 px-4 py-1 rounded-sm text-white font-[600] hover:bg-blue-700`}>
-                                2
-                            </NavLink>
-                            <NavLink to={"models_3"} className={`bg-blue-500 px-4 py-1 rounded-sm text-white font-[600] hover:bg-blue-700`}>
-                                3
-                            </NavLink>
-                       </div>
+                        </div>  
+                        <div className="flex gap-4 mt-3 justify-end pr-20">
+                            <button onClick={() => navigate("/home/models")} className={`bg-blue-500 px-4 py-1 rounded-sm text-white font-[600] hover:bg-blue-700`}>1</button>   
+                            <button onClick={() => navigate("/home/models/models_2")} className={`bg-blue-500 px-4 py-1 rounded-sm text-white font-[600] hover:bg-blue-700`}>2</button>   
+                            
+                        </div>  
                 </div>
             </div>
         </div>
@@ -258,4 +256,4 @@ const Models = () => {
   )
 }
 
-export default Models
+export default Models_page_2

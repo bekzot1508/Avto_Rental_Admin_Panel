@@ -1,7 +1,5 @@
 import Models from "../components/Models/Models"
 
- 
-
 const Models_page = () => {
   return (
     <div>

@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { useState } from "react";
 import { TextIndent, Timer, BuildingOffice, MapPin, Car, WindowsLogo, ListBullets } from "@phosphor-icons/react";
 import { toast } from 'react-toastify';
@@ -19,10 +19,12 @@ const SideBar = () => {
      <div className="flex bg-gray-300 h-screen">
       <div
         className={` ${
-          open ? "w-48" : "w-20 "
-        } bg-blue-950 h-screen p-5 relative duration-300`}
+          open ? "w-64" : "w-20 "
+        } bg-blue-950 w-full p-5 relative duration-300`}
       >
-
+         {
+          open ? <h1 className="font-[700] text-white text-xl ">AutoZoom Admin</h1> : <h1 className="text-white font-[700]">Auto</h1>
+         } 
         <ul className="pt-6">
             <li className={`flex  rounded-xl p-2 cursor-pointer text-sm items-center gap-x-2 text-white hover:bg-blue-600`}>
               <p><TextIndent size={15} /></p>
@@ -77,18 +79,17 @@ const SideBar = () => {
                 </NavLink>
               </span>
             </li>
-   
         </ul>
       </div>
 
         <div className="flex flex-col pb-5 w-full">
-            <div className="flex justify-between pr-20 pl-10 py-5 mb-5 bg-white ">
+            <div className="flex justify-between pr-64 pl-10 py-5 bg-white fixed top-0 w-full">
                 <button type="button" onClick={() => setOpen(!open)}><ListBullets size={25} /></button>
                 <button type="button" className="border border-gray-500 px-2 py-0.5 rounded-md" onClick={logOutButton}>Log out</button>
             </div>
-            <div className="bg-white rounded-md h-full px-5 py-8 mx-5">
-              <Outlet />
-            </div> 
+            <div className="bg-white rounded-md h-full px-5 py-8 mx-5 mt-20 ">
+              <Outlet className="mb-10"/>
+            </div>
         </div>
     </div>
 
