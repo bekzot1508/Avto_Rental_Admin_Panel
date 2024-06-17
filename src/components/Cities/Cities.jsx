@@ -6,7 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const Cities = () => {
     const [GetCitiesData, setGetCitiesData] = useState([])
     const [PostCity, setPostCity] = useState({name:'', images:null, text:""})
+    const [EditCity, setEditCity] = useState({name:'', images:null, text:""})
+    const [id, setId] = useState(null)
     const [postCityOpener, setPostCityOpener] = useState(false)
+    const [deleteOpener, setDeleteOpener] = useState(false)
+    const [editCityOpener, setEditCityOpener] = useState(false)
   
     console.log(GetCitiesData);
     const token = localStorage.getItem("accessToken")
@@ -48,6 +52,67 @@ const Cities = () => {
          console.log(err);
         })
     }
+
+    // DELETE Method
+    const deleteCity = () => {
+      fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/cities/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        method: 'DELETE'
+      })
+      .then(res => res.json())
+      .then(res => {
+          if(res.success) {
+              setDeleteOpener(false)
+              message.success("O'chirildi")
+              const newCities =  GetCitiesData.filter(item => item.id !== id)
+              setGetCitiesData(newCities)
+            } else {
+              message.error("O'chirilmadi")
+            }
+      })
+    }
+
+    const deleteCityId = (id) => {
+      setId(id)
+      setDeleteOpener(true)
+    }
+
+        // EDIT Method cities
+        const editCities = (event) => {
+          event.preventDefault() 
+          const formData = new FormData();
+          formData.append("name", EditCity.name)
+          formData.append("text", EditCity.text)
+          formData.append("images", EditCity.images)
+          fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/cities/${id}`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              },
+              method: 'PUT',
+              body: formData
+          })
+          .then(res => res.json())
+          .then(res => {
+          if (res.success) {
+              setEditCityOpener(false)
+              message.success("edited")
+              getCities()
+          } else {
+              message.error("xatolik")
+          }
+          })
+          .catch(err => {
+          console.log("error", err);
+          })
+        }
+
+        const showEditCity = (city) => {
+          setId(city.id)
+          setEditCity({...EditCity, name:city.name, text:city.text, images:city.images})
+          setEditCityOpener(true)
+      }
 
     useEffect(() => {
         getCities()
@@ -93,8 +158,8 @@ const Cities = () => {
               ),
             action: (
               <>
-                <Button style={{ marginRight: '20px' }} type="primary"  >Edit</Button>
-                <Button type="primary" danger  >Delete</Button>
+                <Button style={{ marginRight: '20px' }} type="primary"  onClick={() => showEditCity(city)}>Edit</Button>
+                <Button type="primary" danger  onClick={() => deleteCityId(city.id)}>Delete</Button>
               </>
             )
           }));
@@ -107,7 +172,7 @@ const Cities = () => {
        </div>
 
          {/* Post City */}
-         <Modal title="Add a new model" open={postCityOpener} onOk={() => setPostCityOpener(true)} onCancel={() => setPostCityOpener(false)} footer={null} >
+        <Modal title="Add a new model" open={postCityOpener} onOk={() => setPostCityOpener(true)} onCancel={() => setPostCityOpener(false)} footer={null} >
             <form id="myCityForm" onSubmit={createCities}>
                <div className="flex flex-col gap-4">
                  <div className="flex flex-col gap-1">
@@ -129,7 +194,41 @@ const Cities = () => {
                   <button type='submit' className="bg-green-600 rounded-sm py-1 px-3 text-white">Send</button>
                 </div>
             </form>
-       </Modal>
+        </Modal>
+
+           {/* Delete Modal */}
+          <Modal title="Delete" open={deleteOpener} onOk={() => setDeleteOpener(true)} onCancel={() => setDeleteOpener(false)} footer={null} className="w-[300px]">
+            <h2 className="font-[600] text-base">would you like to delete this?</h2>
+            <div className="flex gap-8 mt-4 justify-end">
+                <button onClick={() => setDeleteOpener(false)} className="bg-blue-600 rounded-sm py-1 px-3 text-white">Cancel</button> 
+                <button onClick={deleteCity} className="bg-red-600 rounded-sm py-1 px-3 text-white">Delete</button>
+            </div>
+         </Modal>
+
+            {/* EDIT City */}
+        <Modal title="edit the city" open={editCityOpener} onOk={() => setEditCityOpener(true)} onCancel={() => setEditCityOpener(false)} footer={null} >
+            <form id="myCityForm" onSubmit={editCities}>
+               <div className="flex flex-col gap-4">
+                 <div className="flex flex-col gap-1">
+                    <label className="font-[600]">* Name</label>
+                    <input type="text" value={EditCity.name} onChange={(e) => setEditCity({...EditCity, name:e.target.value})} className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
+                 </div>
+                 <div className="flex flex-col gap-1">
+                   <label className="font-[600]">* Text</label>
+                   <input type="text" value={EditCity.text} onChange={(e) => setEditCity({...EditCity, text:e.target.value})} className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
+                 </div>
+                 <div className="flex flex-col gap-1">
+                   <label className="font-[600]">*Upload images</label>
+                   <input type="file"  onChange={(e) => setEditCity({...EditCity, images:e.target.files[0]})} />
+                 </div>
+               </div>
+                 {/* buttons */}
+                <div className="flex gap-5 mt-5 justify-end">
+                  <button type='button' className="bg-blue-600 rounded-sm py-1 px-3 text-white" onClick={() => setEditCityOpener(false)}>Cencel</button>
+                  <button type='submit' className="bg-green-600 rounded-sm py-1 px-3 text-white">Send</button>
+                </div>
+            </form>
+        </Modal>
 
     </div>
   )
