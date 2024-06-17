@@ -1,8 +1,12 @@
+import Cities from "../components/Cities/Cities"
+
  
 
 const Cities_page = () => {
   return (
-    <div>Cities_page</div>
+    <div>
+      <Cities/>
+    </div>
   )
 }
 

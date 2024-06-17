@@ -64,8 +64,7 @@ const Models = () => {
             document.getElementById("myForm").reset()
           } else {
             toast.error("xatolik")
-          }
-         
+          } 
         })
         .catch(err => {
          console.log(err);
