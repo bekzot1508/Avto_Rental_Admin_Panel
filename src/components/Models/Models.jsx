@@ -16,17 +16,16 @@ const Models = () => {
     const [editOpen, setEditOpen] = useState(false)
 //    console.log(brands);
   
-   console.log(Models);
+  //  console.log(Models);
 
     // const urlImage = "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTczNzkzNTUtZDNjYi00NzY1LTgwMGEtNDZhOTU1NWJiOWQyIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxNzU3ODI4NywiZXhwIjoxNzQ5MTE0Mjg3fQ.I7H1QJJsao6-Ab9LkoyDq4t3WeP10L6XsD8zKWlYJno";
+    const token = localStorage.getItem("accessToken")
    
     // Get Models
     const getModels = () => {
         fetch("https://autoapi.dezinfeksiyatashkent.uz/api/models")
         .then(response => response.json())
         .then(data => setModels(data?.data))
-       
     }
 
     // Get brands
@@ -58,10 +57,15 @@ const Models = () => {
         })
         .then(res => res.json())
         .then(res=>{
+          if (res.success== true) {
             getModels()
             setPostOpener(false)
             toast.success("yangi element qo'shildi") // bu funksiya chaqirilgani uchun re-fresh bermasa ham elemenrlar qo'shilaveradi
-           document.getElementById("myForm").reset()
+            document.getElementById("myForm").reset()
+          } else {
+            toast.error("xatolik")
+          }
+         
         })
         .catch(err => {
          console.log(err);
@@ -135,7 +139,7 @@ const Models = () => {
         setId(item.id)
         setEditModels({...editModels, name:item.name, brand_title:item.brand_title, brand_id:item.brand_id})
         setEditOpen(true)
-      }
+    }
 
       // post table column
       const columns = [
@@ -176,14 +180,13 @@ const Models = () => {
           }));
 
   return (
-    <div className="">
+    <div>
         {/* GET */}
-      <div className="relative  ">
+      <div className="relative">
        <button className="rounded-md bg-blue-700 hover:bg-blue-600 text-white py-1 px-3  absolute top-1 right-4 z-10" onClick={() => setPostOpener(true)}>add Model</button>
-        <Table size="small"  columns={columns} dataSource={dataSource}   pagination={{
-      pageSize: 9,
-    }} />
+        <Table size="small"  columns={columns} dataSource={dataSource}   pagination={{pageSize: 9}} />
       </div>
+
         {/* Post Modal */}
         <Modal title="Add a new model" open={postOpener} onOk={() => setPostOpener(true)} onCancel={() => setPostOpener(false)} footer={null} >
             <form id="myForm" onSubmit={createModels}>

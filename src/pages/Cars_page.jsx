@@ -1,8 +1,12 @@
+import Cars from "../components/Cars/Cars"
+
  
 
 const Cars_page = () => {
   return (
-    <div>Cars_page</div>
+    <div>
+      <Cars/>
+    </div>
   )
 }
 
