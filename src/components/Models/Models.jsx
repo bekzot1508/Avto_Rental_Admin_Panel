@@ -173,7 +173,7 @@ const Models = () => {
             action: (
               <>
                 <Button className="mr-[20px]" type="primary"  onClick={() => showEdit(model)}>Edit</Button>
-                <Button type="primary" danger onClick={() => deleteModel(model.id)}>Delete</Button>
+                <Button type="primary" danger onClick={() => handleOpen(model.id)}>Delete</Button>
               </>
             )
           }));
@@ -237,13 +237,12 @@ const Models = () => {
                  </div>
                  <div className="flex flex-col gap-1">
                    <label className="font-[600]">* Brand Name</label>
-                    <select   className="border-2 hover:border-blue-700 rounded-md px-3 py-1">
+                    <select onChange={(e) => setEditModels({...editModels, brand_id:e.target.value})}  className="border-2 hover:border-blue-700 rounded-md px-3 py-1">
                         {
                             brands.map((brand, index) => (
                                 <option 
-                                key={index} 
-                                onChange={(e) => setEditModels({...editModels, brand_id:e.target.value})}
-                                value={brand.id}
+                                  key={index} 
+                                  value={brand.id}
                                 >
                                     {brand.title}
                                 </option>
