@@ -18,9 +18,6 @@ function App() {
 
   return (
     <>
-    {/* {
-      localStorage.getItem("accessToken") ?  <SideBar /> : ""
-    } */}
       <Routes path='/'  element={<Login_page/>}>
         <Route  index element={<Login_page/>}/>
         <Route path='home' element={<SideBar /> }>

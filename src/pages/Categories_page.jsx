@@ -1,8 +1,12 @@
+import Categories from "../components/Cetegories/Categories"
+
  
 
 const Categories_page = () => {
   return (
-    <div className="h-full bg-white">Categories_page</div>
+    <div>
+      <Categories/>
+    </div>
   )
 }
 
