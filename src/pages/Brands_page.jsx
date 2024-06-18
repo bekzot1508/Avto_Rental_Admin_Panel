@@ -1,12 +1,11 @@
- 
+/* eslint-disable no-unused-vars */
+import React from 'react'
+import Brand from '/src/components/Brands/Brand'
 
-const Brands_page = () => {
+export default function Brands_page() {
   return (
     <div>
-      <h2>Hello, My friends</h2>
-      <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, animi?</h3>
+      <Brand/>
     </div>
   )
 }
-
-export default Brands_page
