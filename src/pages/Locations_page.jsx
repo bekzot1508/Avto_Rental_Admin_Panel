@@ -1,8 +1,12 @@
+import Location from "../components/Location/Location"
+
  
 
 const Locations_page = () => {
   return (
-    <div>Locatirons_page</div>
+    <div>
+      <Location/>
+    </div>
   )
 }
 
