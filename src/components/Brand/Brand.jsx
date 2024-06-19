@@ -1,25 +1,23 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Input, Modal, Table, message } from "antd";
+import { Button, Input, Modal, Table } from "antd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function Brand() {
   const [brand, setBrand] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpen1, setIsModalOpen1] = useState(false);
-  const [show, setShow] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [show, setShow] = useState(null);
   const [index, setIndex] = useState(null);
-  const [title, setTitle] =useState("");
-  const [title_e, setTitle_e] =useState("");
-  const [images, setImages]=useState(null);
-  const [images_e, setImages_e]=useState(null);
+  const [title, setTitle] = useState("");
+  const [images, setImages] = useState(null);
   const img_url = "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
-  const url="https://autoapi.dezinfeksiyatashkent.uz/api/brands";
+  const url = "https://autoapi.dezinfeksiyatashkent.uz/api/brands";
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTczNzkzNTUtZDNjYi00NzY1LTgwMGEtNDZhOTU1NWJiOWQyIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxNzU3ODI4NywiZXhwIjoxNzQ5MTE0Mjg3fQ.I7H1QJJsao6-Ab9LkoyDq4t3WeP10L6XsD8zKWlYJno";
   // Method get
   const getBrands = () => {
-    fetch("https://autoapi.dezinfeksiyatashkent.uz/api/brands")
+    fetch(`${url}`)
       .then((res) => res.json())
       .then((item) => setBrand(item?.data))
       .catch((err) => {
@@ -32,81 +30,72 @@ export default function Brand() {
     const form_data = new FormData();
     form_data.append("title", title);
     form_data.append("images", images);
-    if(images&&title){
-        fetch(`${url}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            method: "POST",
-            body: form_data,
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              if (res.success) {
-                getBrands();
-                handleCancel();
-                toast.success("Added successfully", {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                });
-                
-              } else {
-                toast.warning("Error");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
+    if (images && title) {
+      fetch(`${url}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: "POST",
+        body: form_data,
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            getBrands();
+            handleCancel();
+            toast.success("Added successfully", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
             });
-            setTitle("")
-            setImages(null);
-            setShow(false);
-    }
-    else{
-        toast.warn("Input is empty")
+            formReset();
+          } else {
+            toast.warning("Error");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.warn("Input is empty");
     }
   };
   // Method put
   const putBrands = (e) => {
     e.preventDefault();
     const form_data = new FormData();
-    form_data.append("title", title_e);
-    form_data.append("images", images_e);
-    if(images_e&&title_e){
-        fetch(`${url}/${index}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            method: "PUT",
-            body: form_data,
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              handleCancel();
-              if (res.success) {
-                getBrands();
-                handleCancel();
-                toast.success("Edited");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-            setTitle_e("");
-            setImages_e(null);
-            setShow(true);
+    form_data.append("title", title);
+    form_data.append("images", images);
+    if (images && title) {
+      fetch(`${url}/${index}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: "PUT",
+        body: form_data,
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            getBrands();
+            handleCancel();
+            toast.success("Edited");
+            formReset();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.warning("Input is empty");
     }
-    else{
-        toast.warning("Input is empty")
-    }
-    
   };
-  // dlete brand
+  // DELETE brand
   const deleteBrands = () => {
     fetch(`${url}/${index}`, {
       headers: {
@@ -119,21 +108,27 @@ export default function Brand() {
         if (res.success) {
           const newBrand = brand.filter((item) => item.id !== index);
           setBrand(newBrand);
-        message.success("O'chirildi")
-        toast.success("Deleted");
+          setWarning(false);
+          toast.success("Deleted", {
+            position: "top-center",
+          });
         } else {
-          console.log(message.error);
+          toast.warn("No deleted");
         }
       })
       .catch((err) => {
         console.log(err);
       });
-    setIsModalOpen1(false);
+    setWarning(false);
   };
   useEffect(() => {
     getBrands();
   }, []);
-  
+  //Form reset
+  const formReset = () => {
+    setTitle("");
+    setImages(null);
+  };
   // MODALGA OID FUNKSIYALAR
   const addModal = () => {
     setIsModalOpen(true);
@@ -142,21 +137,17 @@ export default function Brand() {
   const editModal = (item) => {
     setIndex(item.id);
     setIsModalOpen(true);
-    setTitle_e(item.title);
-    setImages_e(item.image_src);
-    
+    setTitle(item.title);
+    setImages(item.image_src);
     setShow(false);
   };
-  const handelOpen = (id) => {
+  const warningModal = (id) => {
     setIndex(id);
-    setIsModalOpen1(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
+    setWarning(true);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setShow(true);
+    formReset();
   };
   const dataSource = brand.map((item, index) => ({
     key: item.id,
@@ -166,7 +157,7 @@ export default function Brand() {
     action: (
       <>
         <button
-          onClick={() => handelOpen(item.id)}
+          onClick={() => warningModal(item.id)}
           className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mr-2"
         >
           <img src="/Images/delete.png" alt="error" />
@@ -180,7 +171,6 @@ export default function Brand() {
       </>
     ),
   }));
- 
 
   const columns = [
     {
@@ -206,7 +196,7 @@ export default function Brand() {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold mb-4">Qo'shish</h2>
+        <h2 className="text-2xl font-bold mb-4">Created</h2>
         <button
           onClick={addModal}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -228,22 +218,26 @@ export default function Brand() {
         </button>
       </div>
       <div className="overflow-x-auto">
-        <Table className="my-8" dataSource={dataSource} columns={columns} pagination={{pageSize: 8}} />
+        <Table
+          className="my-8"
+          dataSource={dataSource}
+          columns={columns}
+          pagination={{ pageSize: 8 }}
+        />
       </div>
-     
+
       <div className="modals">
         <form action="">
           <Modal
             title={`${show ? "Add car brand" : "Edit car brand"}`}
             open={isModalOpen}
-            onOk={handleOk}
             onCancel={handleCancel}
             footer={[
               <Button key="back" onClick={handleCancel}>
                 Cancel
               </Button>,
               show ? (
-                <Button key="submit" type="primary" onClick={postBrands} >
+                <Button key="submit" type="primary" onClick={postBrands}>
                   Add
                 </Button>
               ) : (
@@ -258,56 +252,33 @@ export default function Brand() {
               ),
             ]}
           >
-            {show ? (
-              <Input
-                onChange={(e)=>setTitle(e.target.value)}
-                className="my-4"
-                type="text"
-                placeholder="Brand name"
-                value={title}
-                required
-               
-              />
-            ) : (
-              <Input
-                onChange={(e) =>
-                 setTitle_e(e.target.value)
-                }
-                className="my-4"
-                type="text"
-                placeholder="Brand name"
-                value={title_e}
-                required
-              />
-            )}
-            {show ? (
-              <Input
-                aria-label="File browser example"
-                onChange={(e)=>setImages(e.target.files[0])}
-                className="my-4 "
-                type="file"
-                placeholder="Basic usage"
-                required
-              />
-            ) : (
-              <Input
-                aria-label="File browser example"
-                onChange={(e) =>
-                  setImages_e( e.target.files[0])
-                }
-                className="my-4 "
-                type="file"
-                placeholder="Basic usage"
-                required
-              />
-            )}
+            <Input
+              onChange={(e) => setTitle(e.target.value)}
+              className="my-4"
+              type="text"
+              placeholder="Brand name"
+              value={title}
+              required
+            />
+            <Input
+              aria-label="File browser example"
+              onChange={(e) => setImages(e.target.files[0])}
+              className="my-4 "
+              type="file"
+              placeholder="Basic usage"
+              required
+            />
           </Modal>
         </form>
         <Modal
-          open={isModalOpen1}
+          open={warning}
           title="Delete item"
+          onCancel={() => setWarning(false)}
           footer={[
-            <Button onClick={deleteBrands} key="back" type="primary">
+            <Button onClick={() => setWarning(false)} key="back" type="default">
+              Cancel
+            </Button>,
+            <Button onClick={deleteBrands} key="submit" type="primary">
               Delete
             </Button>,
           ]}
