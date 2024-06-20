@@ -8,15 +8,15 @@ const Login_page = () => {
     const [phone, setPhone] = useState("")
     const [parol, setParol] = useState("")
   
-    const tokenJon = localStorage.getItem("accessToken")
-    useEffect(()=> {
-        if(tokenJon?.length > 27) {
-            navigate("/home")
-        } else {
-            localStorage.removeItem("accessToken")
-            navigate("/")
-        }
-    })
+    // const tokenJon = localStorage.getItem("accessToken")
+    // useEffect(()=> {
+    //     if(tokenJon?.length > 27) {
+    //         navigate("/home")
+    //     } else {
+    //         localStorage.removeItem("accessToken")
+    //         navigate("/")
+    //     }
+    // })
 
   const logInSubmit = (e) => {
     e.preventDefault()
