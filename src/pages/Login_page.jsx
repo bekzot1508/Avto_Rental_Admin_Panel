@@ -33,9 +33,9 @@ const Login_page = () => {
     .then((res) => res.json())
     .then((data) => {
         if (data.success === true) {
+            navigate("/home")
             localStorage.setItem("accessToken", data?.data?.tokens?.accessToken?.token)
             toast.success(data?.message)
-            navigate("/home")
         } else {
             toast.error(data?.message)
         }

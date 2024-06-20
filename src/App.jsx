@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <Routes>
+      <Routes >
         <Route  index element={<Login_page/>}/>
         <Route path='home' element={<SideBar /> }>
           <Route path='categories' element={<Categories_page/>}/>
