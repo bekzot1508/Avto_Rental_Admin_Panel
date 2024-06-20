@@ -1,4 +1,4 @@
-import Location from "../components/Location/Location"
+import Location from "../components/Locations/Location"
 
  
 
