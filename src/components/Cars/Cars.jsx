@@ -308,8 +308,8 @@ const Cars = () => {
         price_in_usd_sale: item.price_in_usd_sale,
         location_id: item.location_id,
         inclusive: item.inclusive,
-        images: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[0]?.image?.src}` }], 
-        images: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[1]?.image?.src}` }], 
+        images1: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[0]?.image?.src}` }], 
+        images2: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[1]?.image?.src}` }], 
         cover: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[2]?.image?.src}` }], 
       });
       // setEditCarModels({...EditCarModels, brand_id:item?.brand_id, model_id:item?.model_id, city_id:item?.city_id, category_id:item?.category_id, location_id:item?.location_id, color:item?.color, year:item?.year, seconds:item?.seconds, max_speed:item?.max_speed, max_people:item?.max_people, transmission:item?.transmission, motor:item?.motor, drive_side:item?.drive_side, petrol:item?.petrol, limitperday:item?.limitperday, deposit:item?.deposit, premium_protection:item?.premium_protection, price_in_aed:item?.price_in_aed, price_in_usd:item?.price_in_usd, price_in_aed_sale:item?.price_in_aed_sale, price_in_usd_sale:item?.price_in_usd_sale, inclusive:item?.inclusive, images:item?.images, images:item?.images, cover:item?.cover})
@@ -832,7 +832,7 @@ const Cars = () => {
           <Form.Item
             name="images1"
             label="Upload car images"
-            rules={[{ required: true, message: 'Please upload images' }]}
+            rules={[{   'Please upload images' }]}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             style={{ flex: '0 0 25%', paddingRight: '8px' }}
@@ -854,7 +854,7 @@ const Cars = () => {
           <Form.Item
             name="images2"
             label="Upload the main image"
-            rules={[{ required: true, message: 'Please upload the main image' }]}
+            rules={[{   'Please upload the main image' }]}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             style={{ flex: '0 0 25%', paddingRight: '8px' }}
