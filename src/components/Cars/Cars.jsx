@@ -832,7 +832,7 @@ const Cars = () => {
           <Form.Item
             name="images1"
             label="Upload car images"
-            rules={[{   'Please upload images' }]}
+            rules={[{ required: false, message: 'Please upload images' }]}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             style={{ flex: '0 0 25%', paddingRight: '8px' }}
@@ -854,7 +854,7 @@ const Cars = () => {
           <Form.Item
             name="images2"
             label="Upload the main image"
-            rules={[{   'Please upload the main image' }]}
+            rules={[{  required: false, message: 'Please upload the main image' }]}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             style={{ flex: '0 0 25%', paddingRight: '8px' }}
