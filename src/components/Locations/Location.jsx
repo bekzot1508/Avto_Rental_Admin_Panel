@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 export default function Location() {
   const img_url = "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
   const url = "https://autoapi.dezinfeksiyatashkent.uz/api/locations";
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTczNzkzNTUtZDNjYi00NzY1LTgwMGEtNDZhOTU1NWJiOWQyIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxNzU3ODI4NywiZXhwIjoxNzQ5MTE0Mjg3fQ.I7H1QJJsao6-Ab9LkoyDq4t3WeP10L6XsD8zKWlYJno";
-    localStorage.setItem('apiToken', token);
-  const storedToken = localStorage.getItem('apiToken');
+  const token = localStorage.getItem("accessToken")
+
+
+
   const [locations, setLocations] = useState([]);
   const [isopen, setIsopen] = useState(false);
   const [ischeck, setIscheck] = useState(false);
@@ -40,7 +40,7 @@ export default function Location() {
   const getLocations = () => {
     fetch(`${url}`, {
       headers: {
-        Authorization: `Bearer ${storedToken}`,
+        Authorization: `Bearer ${token}`,
       },
       method: "GET",
     })
@@ -67,7 +67,7 @@ export default function Location() {
     if (image && name && text) {
       fetch(`${url}`, {
         headers: {
-          Authorization: `Bearer ${storedToken}`,
+          Authorization: `Bearer ${token}`,
         },
         method: "POST",
         body: form_data,
@@ -109,7 +109,7 @@ export default function Location() {
     if(name&&image&&text){
       fetch(`${url}/${id}`,{
         headers:{
-          Authorization: `Bearer ${storedToken}`
+          Authorization: `Bearer ${token}`
         },
         method:"PUT",
         body: form_data,
@@ -145,7 +145,7 @@ export default function Location() {
   const deleteLocations = () => {
     fetch(`${url}/${id}`,{
       headers:{
-        Authorization:`Bearer ${storedToken}`
+        Authorization:`Bearer ${token}`
       },
       method:"DELETE",
     }).then(res=>res.json())
