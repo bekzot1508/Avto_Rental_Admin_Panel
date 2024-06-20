@@ -1,7 +1,8 @@
 /* eslint-disable no-dupe-keys */
 /* eslint-disable react/no-unescaped-entities */
 import { useEffect, useState } from "react"
-import { Modal, message,  Button, Table, Switch  } from 'antd';
+import { Modal, message,  Button, Table, Switch, Form, Input, Upload, Select} from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
  
 
@@ -67,14 +68,17 @@ const Cars = () => {
       images:null,
       cover:null
     })
+    const [form] = Form.useForm();
     const [id, setId] = useState(null)
     const [postCarOpener, setPostCarOpener] = useState(false)
     const [open, setOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
+    const [inclusive, setInclusive] = useState(false);
  
  
    //   #########################    TOKEN    ############################
   const token = localStorage.getItem("accessToken")
+  const urlImage = "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/"
 
   // #########################    Get Cars    ############################
   const getCars = () => {
@@ -207,33 +211,53 @@ const Cars = () => {
 
   // #########################   EDIT Method   ############################
     const editCar = (event) => {
-      event.preventDefault() 
       const formData2 = new FormData();
-      formData2.append("brand_id", postCarModels?.brand_id)
-      formData2.append("model_id", postCarModels?.model_id)
-      formData2.append("city_id", postCarModels?.city_id)
-      formData2.append("category_id", postCarModels?.category_id)
-      formData2.append("location_id", postCarModels?.location_id)
-      formData2.append("color", postCarModels?.color)
-      formData2.append("year", postCarModels?.year)
-      formData2.append("seconds", postCarModels?.seconds)
-      formData2.append("max_speed", postCarModels?.max_speed)
-      formData2.append("max_people", postCarModels?.max_people)
-      formData2.append("transmission", postCarModels?.transmission)
-      formData2.append("motor", postCarModels?.motor)
-      formData2.append("drive_side", postCarModels?.drive_side)
-      formData2.append("petrol", postCarModels?.petrol)
-      formData2.append("limitperday", postCarModels?.limitperday)
-      formData2.append("deposit", postCarModels?.deposit)
-      formData2.append("premium_protection", postCarModels?.premium_protection)
-      formData2.append("price_in_aed", postCarModels?.price_in_aed)
-      formData2.append("price_in_usd", postCarModels?.price_in_usd)
-      formData2.append("price_in_aed_sale", postCarModels?.price_in_aed_sale)
-      formData2.append("price_in_usd_sale", postCarModels?.price_in_usd_sale)
-      formData2.append("inclusive", postCarModels?.inclusive)
-      formData2.append("images", postCarModels?.images)
-      formData2.append("images", postCarModels?.images)
-      formData2.append("cover", postCarModels?.cover)
+      formData2.append("brand_id", event?.brand_id)
+      formData2.append("model_id", event?.model_id)
+      formData2.append("city_id", event?.city_id)
+      formData2.append("category_id", event?.category_id)
+      formData2.append("location_id", event?.location_id)
+      formData2.append("color", event?.color)
+      formData2.append("year", event?.year)
+      formData2.append("seconds", event?.seconds)
+      formData2.append("max_speed", event?.max_speed)
+      formData2.append("max_people", event?.max_people)
+      formData2.append("transmission", event?.transmission)
+      formData2.append("motor", event?.motor)
+      formData2.append("drive_side", event?.drive_side)
+      formData2.append("petrol", event?.petrol)
+      formData2.append("limitperday", event?.limitperday)
+      formData2.append("deposit", event?.deposit)
+      formData2.append("premium_protection", event?.premium_protection)
+      formData2.append("price_in_aed", event?.price_in_aed)
+      formData2.append("price_in_usd", event?.price_in_usd)
+      formData2.append("price_in_aed_sale", event?.price_in_aed_sale)
+      formData2.append("price_in_usd_sale", event?.price_in_usd_sale)
+      formData2.append('inclusive', inclusive);
+      if (event.images1 && event.images1.length > 0) {
+        event.images1.forEach((image) => {
+          if (image && image.originFileObj) {
+            formData2.append('images', image.originFileObj, image.name);
+          }
+        });
+      }
+      if (event.images2 && event.images2.length > 0) {
+        event.images2.forEach((image) => {
+          if (image && image.originFileObj) {
+            formData2.append('images', image.originFileObj, image.name);
+          }
+        });
+      }
+      if (event.cover && event.cover.length > 0) {
+        event.cover.forEach((image) => {
+          if (image && image.originFileObj) {
+            formData2.append('cover', image.originFileObj, image.name);
+          }
+        });
+      }
+      // formData2.append("images", EditCarModels?.images)
+      // formData2.append("images", EditCarModels?.images)
+      // formData2.append("cover", EditCarModels?.cover)
       fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/cars/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -244,7 +268,7 @@ const Cars = () => {
       .then(res => res.json())
       .then(res=>{
         if (res?.success == true) {
-          setPostCarOpener(false)
+          setEditOpen(false)
           message.success("edited") 
           getCars()
           // document.getElementById("myCarForm").reset()
@@ -257,10 +281,59 @@ const Cars = () => {
        console.log(err);
       })
     }
+
     const showCarEdit = (item) => {
       setId(item.id)
-      setEditCarModels({...EditCarModels, brand_id:item?.brand_id, model_id:item?.model_id, city_id:item?.city_id, category_id:item?.category_id, location_id:item?.location_id, color:item?.color, year:item?.year, seconds:item?.seconds, max_speed:item?.max_speed, max_people:item?.max_people, transmission:item?.transmission, motor:item?.motor, drive_side:item?.drive_side, petrol:item?.petrol, limitperday:item?.limitperday, deposit:item?.deposit, premium_protection:item?.premium_protection, price_in_aed:item?.price_in_aed, price_in_usd:item?.price_in_usd, price_in_aed_sale:item?.price_in_aed_sale, price_in_usd_sale:item?.price_in_usd_sale, inclusive:item?.inclusive, images:item?.images, images:item?.images, cover:item?.cover})
+      console.log(item);
+      form.setFieldsValue({
+        brand_id: item.brand_id,
+        model_id: item.model_id,
+        city_id: item.city_id,
+        color: item.color,
+        year: item.year,
+        seconds: item.seconds,
+        category_id: item.category_id,
+        max_speed: item.max_speed,
+        max_people: item.max_people,
+        transmission: item.transmission,
+        motor: item.motor,
+        drive_side: item.drive_side,
+        petrol: item.petrol,
+        limitperday: item.limitperday,
+        deposit: item.deposit,
+        premium_protection: item.premium_protection,
+        price_in_aed: item.price_in_aed,
+        price_in_usd: item.price_in_usd,
+        price_in_aed_sale: item.price_in_aed_sale,
+        price_in_usd_sale: item.price_in_usd_sale,
+        location_id: item.location_id,
+        inclusive: item.inclusive,
+        images: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[0]?.image?.src}` }], 
+        images: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[1]?.image?.src}` }], 
+        cover: [{ uid: item?.id, name: 'image', status: 'done', url: `${urlImage}${item?.car_images[2]?.image?.src}` }], 
+      });
+      // setEditCarModels({...EditCarModels, brand_id:item?.brand_id, model_id:item?.model_id, city_id:item?.city_id, category_id:item?.category_id, location_id:item?.location_id, color:item?.color, year:item?.year, seconds:item?.seconds, max_speed:item?.max_speed, max_people:item?.max_people, transmission:item?.transmission, motor:item?.motor, drive_side:item?.drive_side, petrol:item?.petrol, limitperday:item?.limitperday, deposit:item?.deposit, premium_protection:item?.premium_protection, price_in_aed:item?.price_in_aed, price_in_usd:item?.price_in_usd, price_in_aed_sale:item?.price_in_aed_sale, price_in_usd_sale:item?.price_in_usd_sale, inclusive:item?.inclusive, images:item?.images, images:item?.images, cover:item?.cover})
       setEditOpen(true)
+    }
+
+    const beforeUpload = (file) => {
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      const isValidFile = allowedExtensions.includes(fileExtension);
+  
+      if (!isValidFile) {
+        message.error('You can only upload JPG/JPEG/PNG files!');
+      }
+  
+      return isValidFile;
+    };
+  
+    // Handle file upload events
+    const normFile = (e) => {
+      if (Array.isArray(e)) {
+        return e;
+      }
+      return e && e.fileList;
     }
 
 
@@ -545,237 +618,290 @@ const Cars = () => {
 
       {/*  #########################    EDIT Method     ############################  */}
       <Modal title="Edit Car" open={editOpen} onOk={() => setEditOpen(true)} onCancel={() => setEditOpen(false)} footer={null} >
-          <form id="myEditCarForm" onSubmit={editCar} >
-              <div className="flex flex-col gap-5">
+        <Form form={form} name="validateOnly" layout="vertical" autoComplete="off" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }} onFinish={editCar}>
+          <Form.Item
+            label="Category"
+            name="category_id"
+            rules={[{ required: true, message: 'Please select a category!', }]}
+            style={{ display: "block", width:"100%"}}
+          >
+            <Select placeholder="Select Category">
+              {GetCategoryData.map(item => (
+                <Select.Option key={item.id} value={item.id} disabled={item.disabled}>
+                  {item.name_en}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Brand"
+            name="brand_id"
+            rules={[{ required: true, message: 'Please input!', }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Select placeholder="Select Brand">
+              {GetBrandsData.map(item => (
+                <Select.Option key={item.id} value={item.id} disabled={item.disabled}>
+                  {item.title}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Model"
+            name="model_id"
+            rules={[{ required: true, message: 'Please input!', }]}
+            style={{ flex: '0 0 33%' }}
+          >
+            <Select placeholder="Select Model">
+              {GetModelsData.map(item => (
+                <Select.Option key={item.id} value={item.id} disabled={item.disabled}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Location"
+            name="location_id"
+            rules={[{ required: true, message: 'Please input!', }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Select placeholder="Select Location" >
+              {GetLocationData.map(item => (
+                <Select.Option key={item.id} value={item.id} disabled={item.disabled}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="City"
+            name="city_id"
+            rules={[{ required: true, message: 'Please input!', }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Select placeholder="Select City">
+              {GetCitiesData.map(item => (
+                <Select.Option key={item.id} value={item.id} disabled={item.disabled}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="color"
+            label="Color"
+            rules={[{ required: true, message: 'Please enter the name' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="year"
+            label="Yil"
+            rules={[{ required: true, message: 'Please enter the year' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="seconds"
+            label="Seconds"
+            rules={[{ required: true, message: 'Please enter the color' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="max_speed"
+            label="Speed"
+            rules={[{ required: true, message: 'Please enter the speed' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="max_people"
+            label="Max People"
+            rules={[{ required: true, message: 'Please enter the max people' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="motor"
+            label="Motor"
+            rules={[{ required: true, message: 'Please enter the motor' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="transmission"
+            label="Transmission"
+            rules={[{ required: true, message: 'Please enter the transmission' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="drive_side"
+            label="Drive Side"
+            rules={[{ required: true, message: 'Please enter the drive side' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="petrol"
+            label="Yoqilg'i"
+            rules={[{ required: true, message: 'Please enter the yoqilg\'i' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="limitperday"
+            label="Limit Per Day"
+            rules={[{ required: true, message: 'Please enter the limit per day' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="deposit"
+            label="Deposit"
+            rules={[{ required: true, message: 'Please enter the deposit' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="premium_protection"
+            label="Premium Protection Price"
+            rules={[{ required: true, message: 'Please enter the premium protection price' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="price_in_aed"
+            label="Price in AED"
+            rules={[{ required: true, message: 'Please enter the price in AED' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="price_in_usd"
+            label="Price in USD(Otd)"
+            rules={[{ required: true, message: 'Please enter the price in USD(Otd)' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
 
-                {/* category */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Category</label>
-                    <select  onChange={(e) => setEditCarModels({...EditCarModels, category_id:e.target.value})} className="border-2 hover:border-blue-700 rounded-md px-3 py-1">
-                        {
-                            GetCategoryData.map((category, index) => (
-                                <option key={index} value={category.id}> 
-                                  {category.name_en}
-                                </option>
-                            ))
-                        }
-                    </select>
-                </div>
+          <Form.Item
+            name="price_in_aed_sale"
+            label="Price in AED (Otd)"
+            rules={[{ required: true, message: 'Please enter the price in AED (Otd)' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="price_in_usd_sale"
+            label="Price in USD"
+            rules={[{ required: true, message: 'Please enter the price in USD' }]}
+            style={{ flex: '0 0 33%', paddingRight: '8px' }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="inclusive"
+            label="Inclusive"
+            style={{ flex: '0 0 15%', paddingRight: '8px' }}
+            initialValue={inclusive} 
+            valuePropName="checked"
+          >
+          <Switch onChange={(checked) => setInclusive(checked)} /> 
+          </Form.Item>
 
-                {/* Brand */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Brand</label>
-                    <select  onChange={(e) => setEditCarModels({...EditCarModels, brand_id:e.target.value})} className="border-2 hover:border-blue-700 rounded-md px-3 py-1">
-                        {
-                            GetBrandsData.map((brand, index) => (
-                                <option key={index} value={brand.id}> 
-                                  {brand.title}
-                                </option>
-                            ))
-                        }
-                    </select>
-                </div>
-
-                {/* Models */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Model</label>
-                    <select  onChange={(e) => setEditCarModels({...EditCarModels, model_id:e.target.value})} className="border-2 hover:border-blue-700 rounded-md px-3 py-1">
-                        {
-                            GetModelsData.map((model, index) => (
-                                <option key={index} value={model.id}> 
-                                  {model.name}
-                                </option>
-                            ))
-                        }
-                    </select>
-                </div>
-
-                {/* Location */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Location</label>
-                    <select  onChange={(e) => setEditCarModels({...EditCarModels, location_id:e.target.value})} className="border-2 hover:border-blue-700 rounded-md px-3 py-1">
-                        {
-                            GetLocationData.map((location, index) => (
-                                <option key={index} value={location.id}> 
-                                  {location.name}
-                                </option>
-                            ))
-                        }
-                    </select>
-                </div>
-
-                {/* Cities */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* City</label>
-                    <select  onChange={(e) => setEditCarModels({...EditCarModels, city_id:e.target.value})} className="border-2 hover:border-blue-700 rounded-md px-3 py-1">
-                        {
-                            GetCitiesData.map((city, index) => (
-                                <option key={index} value={city.id}> 
-                                  {city.name}
-                                </option>
-                            ))
-                        }
-                    </select>
-                </div>
-
-                {/* Color */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Color</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, color:e.target.value})} 
-                    value={postCarModels.color}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1" />
-                </div>
-
-                {/* Yil */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Yil</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, year:e.target.value})} 
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Seconds */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Seconds</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, seconds:e.target.value})} 
-                    value={postCarModels.seconds}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Speed */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Max Speed</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, max_speed:e.target.value})}
-                    value={postCarModels.max_speed}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Max People */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Max People</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, max_people:e.target.value})}
-                    value={postCarModels.max_people}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Motor */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Motor</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, motor:e.target.value})}
-                    value={postCarModels.motor}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Transmission */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Transmission</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, transmission:e.target.value})}
-                    value={postCarModels.transmission}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Drive side */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Drive Side </label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, drive_side:e.target.value})}
-                    value={postCarModels.drive_side}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Yoqilg'i */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Yoqilg'i  </label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, petrol:e.target.value})}
-                    value={postCarModels.petrol}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Limit Per Day */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Limit Per Day </label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, limitperday:e.target.value})}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Deposit */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Deposit</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, deposit:e.target.value})}
-                    value={postCarModels.deposit}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Premium Protection Price */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Premium Protection Price</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, premium_protection:e.target.value})}
-                    value={postCarModels.premium_protection}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Price in AED */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Price in AED</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, price_in_aed:e.target.value})}
-                    value={postCarModels.price_in_aed}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Price in USD */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Price in USD</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, price_in_usd:e.target.value})}
-                    value={postCarModels.price_in_usd}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Price in AED (Otd) */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Price in AED (Otd)</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, price_in_aed_sale:e.target.value})}
-                    value={postCarModels.price_in_aed_sale}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Price in USD (OTD)*/}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Price in USD(Otd)</label>
-                  <input type="text" onChange={(e) => setEditCarModels({...EditCarModels, price_in_usd_sale:e.target.value})}
-                    value={postCarModels.price_in_usd_sale}
-                    className="border-2 hover:border-blue-700 rounded-md px-3 py-1"/>
-                </div>
-
-                {/* Inclusive */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Inclusive</label>
-                  <Switch value={postCarModels.inclusive}  onChange={(e) => setEditCarModels({...EditCarModels, inclusive:e.target.value})}/>
-                </div>
-
-                {/* Upload car images */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Upload car images</label>
-                  <input type="file" value={postCarModels.images} onChange={(e) => setEditCarModels({...EditCarModels, images:e.target.files[0]})}/>
-                </div>
-
-                {/* Upload the main image */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Upload the main image</label>
-                  <input type="file" value={postCarModels.images} onChange={(e) => setEditCarModels({...EditCarModels, images:e.target.files[0]})}/>
-                </div>
-
-                {/* Upload the cover image */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-[600]">* Upload the cover image</label>
-                  <input type="file" value={postCarModels.cover} onChange={(e) => setEditCarModels({...EditCarModels, cover:e.target.files[0]})}/>
-                </div>
-
+          {/* Picture */}
+          <Form.Item
+            name="images1"
+            label="Upload car images"
+            rules={[{ required: true, message: 'Please upload images' }]}
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            style={{ flex: '0 0 25%', paddingRight: '8px' }}
+          >
+            <Upload
+              customRequest={({ onSuccess }) => {
+                onSuccess('ok');
+              }}
+              beforeUpload={beforeUpload}
+              listType="picture-card"
+            >
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
               </div>
+            </Upload>
+          </Form.Item>
 
-                {/* buttons */}
-              <div className="flex gap-5 mt-5 justify-end">
-                <button type='button' className="bg-blue-600 rounded-sm py-1 px-3 text-white" onClick={() => setEditOpen(false)}>Cencel</button>
-                <button type='submit' className="bg-green-600 rounded-sm py-1 px-3 text-white">Send</button>
+          <Form.Item
+            name="images2"
+            label="Upload the main image"
+            rules={[{ required: true, message: 'Please upload the main image' }]}
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            style={{ flex: '0 0 25%', paddingRight: '8px' }}
+          >
+            <Upload
+              customRequest={({ onSuccess }) => {
+                onSuccess('ok');
+              }}
+              beforeUpload={beforeUpload}
+              listType="picture-card"
+            >
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
               </div>
-          </form>
+            </Upload>
+          </Form.Item>
+          
+          <Form.Item
+            name="cover"
+            label="Upload the cover image"
+            rules={[{ required: true, message: 'Please upload the cover image' }]}
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            style={{ flex: '0 0 25%', paddingRight: '8px' }}
+          >
+            <Upload
+              customRequest={({ onSuccess }) => {
+                onSuccess('ok');
+              }}
+              beforeUpload={beforeUpload}
+              listType="picture-card"
+            >
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            </Upload>
+          </Form.Item>
+          
+          <Form.Item style={{ flex: '0 0 100%' }}>
+            <Button type="primary" htmlType="submit">
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
+          
       </Modal>
 
     </div>
