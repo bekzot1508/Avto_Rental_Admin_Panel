@@ -74,7 +74,7 @@ const Cars = () => {
     const [open, setOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
     const [inclusive, setInclusive] = useState(false);
- 
+ console.log(GetModelsData);
  
    //   #########################    TOKEN    ############################
   const token = localStorage.getItem("accessToken")
@@ -98,8 +98,8 @@ const Cars = () => {
   // #########################    Get Models    ############################
   const getModels = () => {
       fetch("https://autoapi.dezinfeksiyatashkent.uz/api/models")
-       .then(model => model.json())
-       .then(model => setModelsData(model?.data))
+       .then(res => res.json())
+       .then(res => setModelsData(res?.data))
   }
 
   // #########################    Get Cities    ############################
@@ -171,10 +171,14 @@ const Cars = () => {
     })
     .then(res => res.json())
     .then(res=>{
+      if (res?.success == true) {
         getCars()
         setPostCarOpener(false)
         message?.success("yangi element qo'shildi") // bu funksiya chaqirilgani uchun re-fresh bermasa ham elemenrlar qo'shilaveradi
         document?.getElementById("myCarForm").reset()
+      } else {
+        message?.error("Xatolik")
+      }
     })
     .catch(err => {
      console.log(err);
@@ -255,9 +259,7 @@ const Cars = () => {
           }
         });
       }
-      // formData2.append("images", EditCarModels?.images)
-      // formData2.append("images", EditCarModels?.images)
-      // formData2.append("cover", EditCarModels?.cover)
+   
       fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/cars/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
